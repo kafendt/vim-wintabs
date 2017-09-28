@@ -145,6 +145,27 @@ function! wintabs#all()
   call wintabs#init()
 endfunction
 
+" Rename the current window
+function! wintabs#rename_window(title)
+  let current_tab_nr = tabpagenr()
+  let len_current_title_list = len(g:wintabs_tab_titles)
+  let diff = current_tab_nr - len_current_title_list
+
+  " fill list with placeholders for unnamed tabs
+  if diff > 0
+    for i in range(len_current_title_list, current_tab_nr - 1)
+      call add(g:wintabs_tab_titles, '')
+    endfor
+  endif
+
+  " replace name of current buffer
+  let g:wintabs_tab_titles[current_tab_nr - 1] = a:title
+  echo g:wintabs_tab_titles
+
+  call wintabs#init()
+
+endfunction
+
 " close current window
 function! wintabs#close_window()
   let w:wintabs_closing = 1
