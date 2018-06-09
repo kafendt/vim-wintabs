@@ -2,13 +2,15 @@
 function! wintabs#session#init()
   " init session variables, session globals must start with an uppercase letter
   let s:session = {}
-  let g:Wintabs_session_string = '{}'
+  " let g:Wintabs_session_string = '{}'
+  let g:Wintabs_session_string_last = get(g:, 'Wintabs_session_string_current', "{}")
+  let g:Wintabs_session_string_current = g:Wintabs_session_string_last
 
   " support https://github.com/xolox/vim-session
   if exists('g:session_persist_globals')
-    call add(g:session_persist_globals, 'g:Wintabs_session_string')
+    call add(g:session_persist_globals, 'g:Wintabs_session_string_current')
   else
-    let g:session_persist_globals = ['g:Wintabs_session_string']
+    let g:session_persist_globals = ['g:Wintabs_session_string_current']
   endif
 
   " load wintabs session after Vim loading its session
@@ -39,12 +41,12 @@ function! wintabs#session#save(tabpage, window)
   endif
 
   " serialize to session global
-  let g:Wintabs_session_string = string(s:session)
+  let g:Wintabs_session_string_current = string(s:session)
 endfunction
 
 " load session
 function! wintabs#session#load()
-  execute 'let s:session = '.g:Wintabs_session_string
+  execute 'let s:session = '.g:Wintabs_session_string_last
 
   for [tabpage, winlist] in items(s:session)
     " continue if tabpage no longer exists
