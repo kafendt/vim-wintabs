@@ -19,14 +19,14 @@ endfunction
 
 " save buflist of one window to session
 function! wintabs#session#save(tabpage, window)
-  " if tabpages count is correct, refresh passed tabpages, otherwise refresh all 
+  " if tabpages count is correct, refresh passed tabpages, otherwise refresh all
   " tabpages
   if len(s:session) == tabpagenr('$')
     if !has_key(s:session, a:tabpage)
       let s:session[a:tabpage] = {}
     endif
 
-    " if windows count is correct, refresh passed window, otherwise refresh all 
+    " if windows count is correct, refresh passed window, otherwise refresh all
     " windows
     if len(s:session[a:tabpage]) == winnr('$')
       call s:session_save_window(a:tabpage, a:window)
@@ -82,7 +82,8 @@ function! s:session_save_window(tabpage, window)
 
   " bufnr isn't persisted across sessions, but bufname is
   for buffer in buflist
-    call add(s:session[a:tabpage][a:window], bufname(buffer))
+    let l:buffername = expand('#'.buffer.':p')
+    call add(s:session[a:tabpage][a:window], l:buffername)
   endfor
 endfunction
 
